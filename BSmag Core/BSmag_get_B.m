@@ -1,4 +1,4 @@
-function [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z)
+function [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z, BX, BY, BZ)
 %---------------------------------------------------
 %  NAME:      BSmag_get_B.m
 %  WHAT:      Calculates B at field points.
@@ -7,13 +7,17 @@ function [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z)
 %  COPYRIGHT: 2015, Loic Quéval, BSD License (http://opensource.org/licenses/BSD-3-Clause).
 %
 %  USE:
-%    [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z)
+%    [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z, BX, BY, BZ)
 %
 %  INPUTS:
 %    BSmag      = BSmag data structure
 %    X          = Field points x-coordinate vector or matrix
 %    Y          = Field points y-coordinate vector or matrix
 %    Z          = Field points z-coordinate vector or matrix
+% Optional inputs
+%    BX         = Pre existing Magnetic field (X-axis) if there is one
+%    BY         = Pre existing Magnetic field (Y-Axis) if there is one
+%    BZ         = Pre existing Magnetic field (Z-Axis) if there is one
 %
 %  OUTPUTS:
 %    BSmag      = BSmag data structure (no update)
@@ -26,10 +30,12 @@ function [BSmag,X,Y,Z,BX,BY,BZ] = BSmag_get_B(BSmag,X,Y,Z)
 %----------------------------------------------------
 
 mu0 = 4*pi*1e-7; % vacuum permeability [N/A^2]
-           
-BX = zeros(size(X,1),size(X,2),size(X,3));
-BY = zeros(size(X,1),size(X,2),size(X,3));
-BZ = zeros(size(X,1),size(X,2),size(X,3));
+if nargin <= 5
+    BX = zeros(size(X,1),size(X,2),size(X,3));
+    BY = zeros(size(X,1),size(X,2),size(X,3));
+    BZ = zeros(size(X,1),size(X,2),size(X,3));
+   
+end
 
 for nF = 1:BSmag.Nfilament % Loop on each filament
 
